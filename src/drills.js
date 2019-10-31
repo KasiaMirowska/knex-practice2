@@ -34,7 +34,7 @@ function paginateList(page) {
 }
 paginateList(1);
 
-function findItemsForDays(daysAgo) {
+function findItemsolderThanDays(daysAgo) {
     knexInstance
         .select('name','price','date_added','checked','category')
         .from('shopping_list')
@@ -47,7 +47,7 @@ function findItemsForDays(daysAgo) {
             console.log('OLD ITEMS', results)
         })
 };
-findItemsForDays(2);
+findItemsolderThanDays(2);
 
 function findTotalCostInCategory() {
     knexInstance
