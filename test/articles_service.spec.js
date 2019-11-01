@@ -99,7 +99,10 @@ describe('articles service object', function () {
         it(`getAllArticles() resolves all articles from 'blogful_articles' table`, () => {
             return ArticlesService.getAllArticles(db)
                 .then(actual => {
-                    expect(actual).to.eql(testArticles)
+                    expect(actual).to.eql(testArticles.map(article => ({
+                        ...article,
+                        date_published: new Date(article.date_published)
+                    })))
                 })
         })
     })
