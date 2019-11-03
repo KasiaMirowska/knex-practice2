@@ -59,54 +59,38 @@ describe('shopping service object', function () {
             const pickedId = 2;
             const pickedItem = testList[2 - 1];
             return ShoppingService.getById(db, pickedId)
-                .then(actual).to.eql({
-                    id: pickedId,
-                    name: pickedItem.name,
-                    price: pickedItem.price,
-                    date_added: pickedItem.date_added,
-                    checked: false,
-                    category: pickedItem.category,
+                .then(actual => {
+                    expect(actual).to.eql({
+                        id: pickedId,
+                        name: pickedItem.name,
+                        price: pickedItem.price,
+                        date_added: pickedItem.date_added,
+                        checked: false,
+                        category: pickedItem.category,
                 })
+            })   
         })
         it(`deleteItem() removes an item by id from 'shopping_list' table`, () => {
             const itemId = 3
-            return ShoppingService.deleteItem()
+            return ShoppingService.deleteItem(db, itemId)
                 .then(() => ShoppingService.getWholeShoppingList(db))
-                .then(allItems => {[
-                    {
-                        id: 1,
-                        name: 'apples',
-                        price: 2.45,
-                        date_added: new Date(),
-                        checked: false,
-                        category: 'Snack'
-                    },
-                    {
-                        id: 2,
-                        name: 'eggs',
-                        price: 3.99,
-                        date_added: new Date(),
-                        checked: false,
-                        category: 'Breakfast'
-                    },
-                ]
-                const expected = testItems.filter(item = item.id !== id) 
-                expect(allItems).to.eql(expected);   
+                .then(allItems => {
+                    const expected = testList.filter(item => item.id !== itemId) 
+                    expect(allItems).to.eql(expected);   
             })
         })
         it(`updatesItem() updates an item from the 'shopping_list' by id`, () => {
             const itemToUpdateId = 3
             const newItemData = {
-                id: 2,
-                        name: 'updated name',
-                        price: 'updated price',
-                        date_added: new Date(),
-                        checked: 'updated checked',
-                        category: 'updated category'
+                name: 'updated name',
+                price: 1.55,
+                date_added: new Date(),
+                checked: true,
+                category: 'Lunch',
             }
-            return ShoppingService.updatedItem(db, itemToUpdateId, newItemData)
+            return ShoppingService.updateItem(db, itemToUpdateId, newItemData)
                 .then(() => ShoppingService.getById(db, itemToUpdateId))
-                .them(item => {
+                .then(item => {
                     expect(item).to.eql({
                         id: itemToUpdateId,
                         ...newItemData,
